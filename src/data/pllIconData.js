@@ -1,0 +1,23 @@
+export const PLL_ICON_DATA = [
+  { id: 'Aa',  cyc: [['BL','TL','TR']] },
+  { id: 'Ab',  cyc: [['TR','TL','BL']] },
+  { id: 'E',   cyc: [['TL','BR'], ['TR','BL']] },
+  { id: 'F',   cyc: [['TR','BL'], ['T','B']] },
+  { id: 'Ga',  cyc: [['TL','BL','BR'], ['T','L','B']] },
+  { id: 'Gb',  cyc: [['TR','BR','BL'], ['R','B','L']] },
+  { id: 'Gc',  cyc: [['TR','TL','BL'], ['T','R','L']] },
+  { id: 'Gd',  cyc: [['TL','TR','BR'], ['T','B','R']] },
+  { id: 'H',   cyc: [['T','B'], ['L','R']] },
+  { id: 'Ja',  cyc: [['TL','BL'], ['T','L']] },
+  { id: 'Jb',  cyc: [['TR','BR'], ['R','B']] },
+  { id: 'Na',  cyc: [['TL','BR'], ['TR','BL']] },
+  { id: 'Nb',  cyc: [['TL','TR'], ['BL','BR']] },
+  { id: 'Ra',  cyc: [['TL','TR'], ['T','L']] },
+  { id: 'Rb',  cyc: [['TR','BR'], ['T','R']] },
+  { id: 'T',   cyc: [['TR','BL'], ['L','R']] },
+  { id: 'Ua',  cyc: [['T','L','B']] },
+  { id: 'Ub',  cyc: [['T','B','L']] },
+  { id: 'V',   cyc: [['TL','BR'], ['T','R']] },
+  { id: 'Y',   cyc: [['TL','BR'], ['L','B']] },
+  { id: 'Z',   cyc: [['T','L'], ['B','R']] }
+];
