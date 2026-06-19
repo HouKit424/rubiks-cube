@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import AlgorithmIcon from "./AlgorithmIcon";
 
 const CATEGORY_EMOJIS = {
   // OLL categories
@@ -25,25 +26,14 @@ export default function AlgorithmTimeline({
   mode = "PLL",
 }) {
   let globalMoveIdx = 0;
-  const fullAlgStr = useMemo(() => flatMoves.map(m => m.move).join(" "), [flatMoves]);
-  const stickering = mode === "OLL" ? "OLL" : "PLL";
   const categoryEmoji = CATEGORY_EMOJIS[algorithmCase.category] || "🧩";
 
   return (
     <div className="timeline-container">
       <div className="timeline-header" style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "8px" }}>
         
-        <div className="case-illustration" style={{ width: "70px", height: "70px", flexShrink: 0, background: "rgba(0,0,0,0.2)", borderRadius: "var(--radius-sm)", border: "1px solid var(--color-border)", overflow: "hidden" }}>
-          <twisty-player
-            alg={fullAlgStr}
-            experimental-setup-anchor="end"
-            experimental-stickering={stickering}
-            visualization="2D"
-            control-panel="none"
-            background="none"
-            viewer-link="none"
-            style={{ width: "100%", height: "100%" }}
-          ></twisty-player>
+        <div className="case-illustration" style={{ width: "70px", height: "70px", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <AlgorithmIcon algId={algorithmCase.id} mode={mode} size={64} />
         </div>
 
         <div>

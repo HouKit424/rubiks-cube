@@ -1,33 +1,25 @@
 import { useEffect, useRef } from "react";
 
-export default function CubeViewer({ setupAlg, currentSingleMove, isComplete, tempoScale = 0.9, stickering = "full", topColor = "yellow" }) {
+export default function CubeViewer({ setupAlg, currentSingleMove, isComplete, tempoScale = 0.9, stickering = "full" }) {
   const containerRef = useRef(null);
   const playerRef    = useRef(null);
   const readyRef     = useRef(false);
   const rafRef       = useRef(null);
 
-  const rotationMap = {
-    yellow: "x2",
-    white: "",
-    red: "z",
-    orange: "z'",
-    green: "x'",
-    blue: "x",
-  };
-
-  // Create / re-create TwistyPlayer when stickering or topColor changes
+  // Create / re-create TwistyPlayer when stickering changes
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
-    const rotationAlg = rotationMap[topColor] || "";
-    const combinedSetupAlg = [rotationAlg, setupAlg].filter(Boolean).join(" ");
+    let isMounted = true;
 
     import("cubing/twisty").then(({ TwistyPlayer }) => {
+      if (!isMounted) return;
+
       const player = new TwistyPlayer({
         puzzle:                 "3x3x3",
         alg:                   "",
-        experimentalSetupAlg:  combinedSetupAlg,
+        experimentalSetupAlg:  setupAlg,
         hintFacelets:          "none",
         background:            "none",
         controlPanel:          "none",
@@ -35,6 +27,7 @@ export default function CubeViewer({ setupAlg, currentSingleMove, isComplete, te
         experimentalStickering: stickering,
         tempoScale,
       });
+
       player.style.width  = "100%";
       player.style.height = "100%";
       container.innerHTML = "";
@@ -44,12 +37,13 @@ export default function CubeViewer({ setupAlg, currentSingleMove, isComplete, te
     });
 
     return () => {
+      isMounted = false;
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       if (containerRef.current) containerRef.current.innerHTML = "";
       playerRef.current = null;
       readyRef.current  = false;
     };
-  }, [stickering, topColor]);
+  }, [stickering]);
 
   // Keep tempoScale in sync when speed changes
   useEffect(() => {
@@ -64,18 +58,16 @@ export default function CubeViewer({ setupAlg, currentSingleMove, isComplete, te
     if (!readyRef.current || !playerRef.current) return;
 
     const player = playerRef.current;
-    const rotationAlg = rotationMap[topColor] || "";
-    const combinedSetupAlg = [rotationAlg, setupAlg].filter(Boolean).join(" ");
 
     if (!currentSingleMove) {
       try { player.pause(); } catch (_) {}
-      player.experimentalSetupAlg = combinedSetupAlg;
+      player.experimentalSetupAlg = setupAlg;
       player.alg = "";
       return;
     }
 
     try { player.pause(); } catch (_) {}
-    player.experimentalSetupAlg = combinedSetupAlg;
+    player.experimentalSetupAlg = setupAlg;
     player.alg = currentSingleMove;
     player.timestamp = 0;
 
@@ -89,12 +81,10 @@ export default function CubeViewer({ setupAlg, currentSingleMove, isComplete, te
         } catch (_) {}
       }
     });
-  }, [setupAlg, currentSingleMove, topColor]);
+  }, [setupAlg, currentSingleMove]);
 
   return (
     <div className="cube-viewer-wrapper">
-      <div className="cube-glow" />
-
       <div
         ref={containerRef}
         className="cube-player"

@@ -15,8 +15,8 @@ export default function App() {
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
   const [theme,       setTheme]       = useState("dark");  // "dark" | "light"
   const [speedPreset, setSpeedPreset] = useState(SPEED_PRESETS[1]);
-  const [topColor,    setTopColor]    = useState("yellow");
   const [mode,        setMode]        = useState("PLL");   // "PLL" | "OLL"
+  const [showTimer, setShowTimer]     = useState(false);
 
   const currentAlgorithms = mode === "PLL" ? algorithms : ollAlgorithms;
   const currentCategories = mode === "PLL" ? PLL_CATEGORIES : OLL_CATEGORIES;
@@ -43,7 +43,9 @@ export default function App() {
     setSelectedVariantIndex(0);
   };
 
-  const toggleTheme = () => setTheme((t) => (t === "dark" ? "light" : "dark"));
+
+
+  const [showThemeMenu, setShowThemeMenu] = useState(false);
 
   return (
     <div className="app-root" data-theme={theme}>
@@ -61,53 +63,83 @@ export default function App() {
             <button
               onClick={() => setMode("PLL")}
               className="header-tag"
-              style={{ margin: 0, cursor: "pointer", border: mode === "PLL" ? undefined : "none", background: mode === "PLL" ? undefined : "transparent", color: mode === "PLL" ? undefined : "var(--color-text-dim)" }}
+              style={{ margin: 0, cursor: "pointer", border: mode === "PLL" ? "1px solid var(--color-border)" : "none", background: mode === "PLL" ? "var(--color-surface)" : "transparent", color: mode === "PLL" ? "var(--color-text)" : "var(--color-text-dim)" }}
             >
               PLL
             </button>
             <button
               onClick={() => setMode("OLL")}
               className="header-tag"
-              style={{ margin: 0, cursor: "pointer", border: mode === "OLL" ? undefined : "none", background: mode === "OLL" ? undefined : "transparent", color: mode === "OLL" ? undefined : "var(--color-text-dim)" }}
+              style={{ margin: 0, cursor: "pointer", border: mode === "OLL" ? "1px solid var(--color-border)" : "none", background: mode === "OLL" ? "var(--color-surface)" : "transparent", color: mode === "OLL" ? "var(--color-text)" : "var(--color-text-dim)" }}
             >
               OLL
             </button>
           </div>
 
-          {/* Theme toggle */}
-          <button
-            id="btn-theme-toggle"
-            className="theme-toggle"
-            onClick={toggleTheme}
-            title={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
-            aria-label="Toggle theme"
-          >
-            {theme === "dark" ? "☀️" : "🌙"}
-          </button>
-
-          {/* Top face colour selector */}
-          <div className="top-color-selector">
-            <span className="top-color-label">🎨</span>
-            <select
-              id="top-color-select"
-              value={topColor}
-              onChange={(e) => setTopColor(e.target.value)}
-              className="top-color-select"
-              aria-label="Top face color"
+          {/* Theme Selector Dropdown */}
+          <div className="theme-selector-wrapper" style={{ position: 'relative' }}>
+            <button
+              onClick={() => setShowThemeMenu(!showThemeMenu)}
+              title="Select Theme"
+              style={{
+                width: '32px', height: '32px', borderRadius: '50%', background: 'var(--color-surface)',
+                border: '1px solid var(--color-border)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: '16px'
+              }}
             >
-              <option value="yellow">Yellow</option>
-              <option value="white">White</option>
-              <option value="red">Red</option>
-              <option value="orange">Orange</option>
-              <option value="green">Green</option>
-              <option value="blue">Blue</option>
-            </select>
+              🎨
+            </button>
+            {showThemeMenu && (
+              <div
+                style={{
+                  position: 'absolute', top: '100%', right: 0, marginTop: '8px',
+                  background: 'var(--color-surface)', border: '1px solid var(--color-border)',
+                  borderRadius: '12px', padding: '12px', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.2)', zIndex: 100
+                }}
+              >
+                {[
+                  { id: 'dark', color: '#1e224a' },
+                  { id: 'pastel-purple', color: '#d8b4fe' },
+                  { id: 'pastel-blue', color: '#93c5fd' },
+                  { id: 'pastel-green', color: '#86efac' },
+                  { id: 'pastel-pink', color: '#f9a8d4' },
+                  { id: 'pastel-orange', color: '#fdba74' },
+                  { id: 'pastel-yellow', color: '#fde047' },
+                  { id: 'pastel-mint', color: '#5eead4' },
+                ].map(t => (
+                  <button
+                    key={t.id}
+                    onClick={() => { setTheme(t.id); setShowThemeMenu(false); }}
+                    title={t.id}
+                    aria-label={`Select ${t.id} theme`}
+                    style={{
+                      width: '24px', height: '24px', borderRadius: '50%', background: t.color,
+                      border: theme === t.id ? '2px solid var(--color-text)' : '1px solid rgba(0,0,0,0.2)',
+                      cursor: 'pointer', padding: 0, transition: '0.2s',
+                    }}
+                  />
+                ))}
+              </div>
+            )}
           </div>
+          {/* Timer Toggle */}
+          <button
+            onClick={() => setShowTimer(!showTimer)}
+            title="Toggle Timer"
+            style={{
+              height: '32px', borderRadius: '20px', background: showTimer ? 'var(--color-active)' : 'var(--color-surface)',
+              border: '1px solid var(--color-border)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              padding: '0 12px', fontSize: '12px', fontWeight: 'bold', color: showTimer ? '#fff' : 'var(--color-text)', transition: '0.2s', marginLeft: '8px'
+            }}
+          >
+            ⏱️ Timer
+          </button>
         </div>
       </header>
 
       <main className="app-main">
-        {/* Left Column (70%): Algorithm selector + cube viewer + timeline + controls */}
+        {/* Left Column: Algorithm selector + cube viewer + timeline + controls */}
         <section className="pane pane--practice-left" aria-label="Visualizer Panel">
           <AlgorithmSelector
             algorithms={currentAlgorithms}
@@ -120,10 +152,9 @@ export default function App() {
 
           <div className="practice-viewer-row">
             <CubeViewer
-              topColor={topColor}
-              setupAlg={timerMode === "full" ? timerScramble : setupAlg}
-              currentSingleMove={timerMode === "full" ? "" : currentSingleMove}
-              isComplete={timerMode === "full" ? false : isComplete}
+              setupAlg={setupAlg}
+              currentSingleMove={currentSingleMove}
+              isComplete={isComplete}
               tempoScale={speedPreset.tempoScale}
               stickering={mode === "OLL" ? "OLL" : "PLL"}
             />
@@ -161,15 +192,16 @@ export default function App() {
           </div>
         </section>
 
-        <div className="pane-divider pane-divider--vertical" />
+        {showTimer && <div className="pane-divider pane-divider--vertical" />}
 
-        {/* Right Column (30%): Timer */}
-        <section className="pane pane--practice-right" aria-label="Practice Timer">
-          <SolveTimer
-            variant={algorithmVariant}
-            onActiveScrambleChange={handleActiveScrambleChange}
-          />
-        </section>
+        {showTimer && (
+          <section className="pane pane--practice-right" aria-label="Practice Timer">
+            <SolveTimer
+              variant={algorithmVariant}
+              onActiveScrambleChange={handleActiveScrambleChange}
+            />
+          </section>
+        )}
       </main>
 
       <NotationGuide />

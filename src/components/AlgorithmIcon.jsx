@@ -4,16 +4,16 @@ import { PLL_ICON_DATA } from '../data/pllIconData';
 
 const C = {
   bg:     'transparent',
-  grid:   '#1e224a',
-  yellow: '#e8d44b',
-  dark:   '#2a3060',
-  front:  '#23a86e',
-  right:  '#d43a3a',
-  back:   '#2a6ed4',
-  left:   '#e8832a',
-  white:  '#dcdcf0',
-  arrow1: '#23a86e',
-  arrow2: '#e8d44b'
+  grid:   'var(--color-border)',
+  yellow: 'var(--color-active)',
+  dark:   'var(--color-future)',
+  front:  '#4caf50',
+  right:  '#f44336',
+  back:   '#2196f3',
+  left:   '#ff9800',
+  white:  '#ffffff',
+  arrow1: 'var(--color-text)',
+  arrow2: 'var(--color-active)'
 };
 
 const SOLVED = {
@@ -47,8 +47,11 @@ export default function AlgorithmIcon({ algId, mode, size = 48 }) {
   const bw = S * 0.06;
   const r = 2; // border radius for stickers
 
-  if (mode === 'OLL' || algId.startsWith('OLL')) {
-    const caseData = ollData.find(o => o.id === algId);
+  const isOLL = mode === 'OLL' || /^\d+$/.test(algId) || algId.startsWith('OLL');
+
+  if (isOLL) {
+    const searchId = algId.startsWith('OLL') ? algId : `OLL-${algId}`;
+    const caseData = ollData.find(o => o.id === searchId);
     if (!caseData) return <svg width={S} height={S} />;
 
     return (
@@ -92,7 +95,7 @@ export default function AlgorithmIcon({ algId, mode, size = 48 }) {
     );
   }
 
-  if (mode === 'PLL' || (!algId.startsWith('OLL') && PLL_ICON_DATA.some(p => p.id === algId))) {
+  if (mode === 'PLL' || (!isOLL && PLL_ICON_DATA.some(p => p.id === algId))) {
     let searchId = algId;
     if (algId.endsWith("-Perm")) {
       searchId = algId.replace("-Perm", "");
