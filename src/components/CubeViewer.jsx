@@ -1,25 +1,37 @@
 import { useEffect, useRef } from "react";
 
-export default function CubeViewer({ setupAlg, currentSingleMove, isComplete, tempoScale = 0.9, stickering = "full" }) {
+export default function CubeViewer({ setupAlg, currentSingleMove, isComplete, tempoScale = 0.9, stickering = "full", topColor = "yellow" }) {
   const containerRef = useRef(null);
   const playerRef    = useRef(null);
   const readyRef     = useRef(false);
   const rafRef       = useRef(null);
 
-  // Create TwistyPlayer once
+  const rotationMap = {
+    yellow: "x2",
+    white: "",
+    red: "z",
+    orange: "z'",
+    green: "x'",
+    blue: "x",
+  };
+
+  // Create / re-create TwistyPlayer when stickering or topColor changes
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
+    const rotationAlg = rotationMap[topColor] || "";
+    const combinedSetupAlg = [rotationAlg, setupAlg].filter(Boolean).join(" ");
+
     import("cubing/twisty").then(({ TwistyPlayer }) => {
       const player = new TwistyPlayer({
-        puzzle:               "3x3x3",
-        alg:                  "",
-        experimentalSetupAlg: "",
-        hintFacelets:         "none",
-        background:           "none",
-        controlPanel:         "none",
-        visualization:        "3D",
+        puzzle:                 "3x3x3",
+        alg:                   "",
+        experimentalSetupAlg:  combinedSetupAlg,
+        hintFacelets:          "none",
+        background:            "none",
+        controlPanel:          "none",
+        visualization:         "3D",
         experimentalStickering: stickering,
         tempoScale,
       });
@@ -37,7 +49,7 @@ export default function CubeViewer({ setupAlg, currentSingleMove, isComplete, te
       playerRef.current = null;
       readyRef.current  = false;
     };
-  }, [stickering]);
+  }, [stickering, topColor]);
 
   // Keep tempoScale in sync when speed changes
   useEffect(() => {
@@ -52,16 +64,18 @@ export default function CubeViewer({ setupAlg, currentSingleMove, isComplete, te
     if (!readyRef.current || !playerRef.current) return;
 
     const player = playerRef.current;
+    const rotationAlg = rotationMap[topColor] || "";
+    const combinedSetupAlg = [rotationAlg, setupAlg].filter(Boolean).join(" ");
 
     if (!currentSingleMove) {
       try { player.pause(); } catch (_) {}
-      player.experimentalSetupAlg = setupAlg || "";
+      player.experimentalSetupAlg = combinedSetupAlg;
       player.alg = "";
       return;
     }
 
     try { player.pause(); } catch (_) {}
-    player.experimentalSetupAlg = setupAlg || "";
+    player.experimentalSetupAlg = combinedSetupAlg;
     player.alg = currentSingleMove;
     player.timestamp = 0;
 
@@ -75,7 +89,7 @@ export default function CubeViewer({ setupAlg, currentSingleMove, isComplete, te
         } catch (_) {}
       }
     });
-  }, [setupAlg, currentSingleMove]);
+  }, [setupAlg, currentSingleMove, topColor]);
 
   return (
     <div className="cube-viewer-wrapper">

@@ -11,15 +11,16 @@ import NotationGuide from "./components/NotationGuide";
 import SolveTimer from "./components/SolveTimer";
 
 export default function App() {
-  const [selectedId,   setSelectedId]   = useState("T");
+  const [selectedId, setSelectedId] = useState("T");
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
   const [theme,        setTheme]        = useState("dark");   // "dark" | "light"
   const [speedPreset,  setSpeedPreset]  = useState(SPEED_PRESETS[1]); // normal
+  const [topColor, setTopColor] = useState('yellow'); // default top face color
   const [layoutMode,   setLayoutMode]   = useState(() => {
     return localStorage.getItem("cubetrainer_layout_mode") ?? "practice";
   });
 
-  const [mode,          setMode]          = useState("PLL"); // "PLL" | "OLL"
+  const [mode, setMode] = useState("PLL"); // "PLL" | "OLL"
 
   const currentAlgorithms = mode === "PLL" ? algorithms : ollAlgorithms;
   const currentCategories = mode === "PLL" ? PLL_CATEGORIES : OLL_CATEGORIES;
@@ -94,6 +95,7 @@ export default function App() {
           </button>
 
           {/* Theme toggle */}
+                    {/* Theme toggle */}
           <button
             id="btn-theme-toggle"
             className="theme-toggle"
@@ -103,6 +105,24 @@ export default function App() {
           >
             {theme === "dark" ? "☀️" : "🌙"}
           </button>
+          {/* Top color selector */}
+          <div className="top-color-selector">
+            <span className="top-color-label">🎨</span>
+            <select
+              id="top-color-select"
+              value={topColor}
+              onChange={(e) => setTopColor(e.target.value)}
+              className="top-color-select"
+              aria-label="Top face color"
+            >
+              <option value="yellow">Yellow</option>
+              <option value="white">White</option>
+              <option value="red">Red</option>
+              <option value="orange">Orange</option>
+              <option value="green">Green</option>
+              <option value="blue">Blue</option>
+            </select>
+          </div>
         </div>
       </header>
 
@@ -122,13 +142,14 @@ export default function App() {
 
               <div className="practice-viewer-row">
                 <CubeViewer
+                  topColor={topColor}
                   setupAlg={timerMode === "full" ? timerScramble : setupAlg}
                   currentSingleMove={timerMode === "full" ? "" : currentSingleMove}
                   isComplete={timerMode === "full" ? false : isComplete}
                   tempoScale={speedPreset.tempoScale}
                   stickering={mode === "OLL" ? "OLL" : "PLL"}
                 />
-                
+
                 <div className="practice-details-column">
                   <AlgorithmTimeline
                     algorithmCase={selectedCase}
@@ -144,9 +165,9 @@ export default function App() {
                     onJumpToMove={jumpToMove}
                     mode={mode}
                   />
-                  
+
                   <div className="controls-divider" />
-                  
+
                   <Controls
                     onPrev={prevMove}
                     onNext={nextMove}
@@ -177,6 +198,7 @@ export default function App() {
             {/* Top: 3D Cube + Algorithm Timeline side-by-side */}
             <section className="pane pane--cube" aria-label="3D Cube & Timeline">
               <CubeViewer
+                topColor={topColor}
                 setupAlg={timerMode === "full" ? timerScramble : setupAlg}
                 currentSingleMove={timerMode === "full" ? "" : currentSingleMove}
                 isComplete={timerMode === "full" ? false : isComplete}
@@ -241,3 +263,4 @@ export default function App() {
     </div>
   );
 }
+

@@ -1,8 +1,8 @@
 export const PLL_CATEGORIES = [
-  { id: "edge",   label: "Edge Only",    color: "#22d3ee" },
-  { id: "corner", label: "Corner Only",  color: "#a78bfa" },
-  { id: "mixed",  label: "Mixed",        color: "#f59e0b" },
-  { id: "gperm",  label: "G-Perms",      color: "#34d399" },
+  { id: "edge", label: "Edge Only", color: "#22d3ee" },
+  { id: "corner", label: "Corner Only", color: "#a78bfa" },
+  { id: "mixed", label: "Mixed", color: "#f59e0b" },
+  { id: "gperm", label: "G-Perms", color: "#34d399" },
 ];
 
 export const algorithms = [
@@ -14,16 +14,16 @@ export const algorithms = [
       {
         id: "H-1", name: "Standard MU",
         chunks: [
-          { id: "c0", label: "Setup",  moves: ["M2", "U"] },
-          { id: "c1", label: "Core",   moves: ["M2", "U2"] },
+          { id: "c0", label: "Setup", moves: ["M2", "U"] },
+          { id: "c1", label: "Core", moves: ["M2", "U2"] },
           { id: "c2", label: "Finish", moves: ["M2", "U", "M2"] },
         ]
       },
       {
         id: "H-2", name: "Alternative MU",
         chunks: [
-          { id: "c0", label: "Setup",  moves: ["M2", "U'"] },
-          { id: "c1", label: "Core",   moves: ["M2", "U2"] },
+          { id: "c0", label: "Setup", moves: ["M2", "U'"] },
+          { id: "c1", label: "Core", moves: ["M2", "U2"] },
           { id: "c2", label: "Finish", moves: ["M2", "U'", "M2"] },
         ]
       }
@@ -36,8 +36,8 @@ export const algorithms = [
       {
         id: "Z-1", name: "Standard MU",
         chunks: [
-          { id: "c0", label: "Setup",  moves: ["M'", "U", "M2", "U"] },
-          { id: "c1", label: "Core",   moves: ["M2", "U", "M'"] },
+          { id: "c0", label: "Setup", moves: ["M'", "U", "M2", "U"] },
+          { id: "c1", label: "Core", moves: ["M2", "U", "M'"] },
           { id: "c2", label: "Finish", moves: ["U2", "M2", "U'"] },
         ]
       },
@@ -57,8 +57,8 @@ export const algorithms = [
       {
         id: "Ua-1", name: "Standard MU",
         chunks: [
-          { id: "c0", label: "Setup",  moves: ["M2", "U"] },
-          { id: "c1", label: "Core",   moves: ["M", "U2"] },
+          { id: "c0", label: "Setup", moves: ["M2", "U"] },
+          { id: "c1", label: "Core", moves: ["M", "U2"] },
           { id: "c2", label: "Finish", moves: ["M'", "U", "M2"] },
         ]
       },
@@ -79,8 +79,8 @@ export const algorithms = [
       {
         id: "Ub-1", name: "Standard MU",
         chunks: [
-          { id: "c0", label: "Setup",  moves: ["M2", "U'"] },
-          { id: "c1", label: "Core",   moves: ["M", "U2"] },
+          { id: "c0", label: "Setup", moves: ["M2", "U'"] },
+          { id: "c1", label: "Core", moves: ["M", "U2"] },
           { id: "c2", label: "Finish", moves: ["M'", "U'", "M2"] },
         ]
       },
@@ -104,16 +104,16 @@ export const algorithms = [
         id: "Aa-1", name: "Standard",
         chunks: [
           { id: "c0", label: "Setup", moves: ["x", "R'", "U", "R'"] },
-          { id: "c1", label: "D2",    moves: ["D2", "R", "U'", "R'"] },
-          { id: "c2", label: "Finish",moves: ["D2", "R2", "x'"] },
+          { id: "c1", label: "D2", moves: ["D2", "R", "U'", "R'"] },
+          { id: "c2", label: "Finish", moves: ["D2", "R2", "x'"] },
         ]
       },
       {
         id: "Aa-2", name: "Front version",
         chunks: [
           { id: "c0", label: "Setup", moves: ["y'", "R'", "F", "R'"] },
-          { id: "c1", label: "B2",    moves: ["B2", "R", "F'", "R'"] },
-          { id: "c2", label: "Finish",moves: ["B2", "R2"] },
+          { id: "c1", label: "B2", moves: ["B2", "R", "F'", "R'"] },
+          { id: "c2", label: "Finish", moves: ["B2", "R2"] },
         ]
       }
     ]
@@ -126,16 +126,16 @@ export const algorithms = [
         id: "Ab-1", name: "Standard",
         chunks: [
           { id: "c0", label: "Setup", moves: ["x'", "R", "U'", "R"] },
-          { id: "c1", label: "D2",    moves: ["D2", "R'", "U", "R"] },
-          { id: "c2", label: "Finish",moves: ["D2", "R2", "x"] },
+          { id: "c1", label: "D2", moves: ["D2", "R'", "U", "R"] },
+          { id: "c2", label: "Finish", moves: ["D2", "R2", "x"] },
         ]
       },
       {
         id: "Ab-2", name: "Front version",
         chunks: [
           { id: "c0", label: "Setup", moves: ["y", "R", "B'", "R"] },
-          { id: "c1", label: "F2",    moves: ["F2", "R'", "B", "R"] },
-          { id: "c2", label: "Finish",moves: ["F2", "R2"] },
+          { id: "c1", label: "F2", moves: ["F2", "R'", "B", "R"] },
+          { id: "c2", label: "Finish", moves: ["F2", "R2"] },
         ]
       }
     ]
@@ -147,10 +147,10 @@ export const algorithms = [
       {
         id: "E-1", name: "Standard",
         chunks: [
-          { id: "c0", label: "Setup",   moves: ["x'", "R", "U'", "R'", "D"] },
+          { id: "c0", label: "Setup", moves: ["x'", "R", "U'", "R'", "D"] },
           { id: "c1", label: "Forward", moves: ["R", "U", "R'", "D'"] },
-          { id: "c2", label: "Back",    moves: ["R", "U", "R'", "D"] },
-          { id: "c3", label: "Finish",  moves: ["R", "U'", "R'", "D'", "x"] },
+          { id: "c2", label: "Back", moves: ["R", "U", "R'", "D"] },
+          { id: "c3", label: "Finish", moves: ["R", "U'", "R'", "D'", "x"] },
         ]
       }
     ]
@@ -194,10 +194,10 @@ export const algorithms = [
       {
         id: "T-1", name: "Standard",
         chunks: [
-          { id: "c0", label: "Sexy Move",    moves: ["R", "U", "R'", "U'"] },
-          { id: "c1", label: "Setup",        moves: ["R'", "F", "R2", "U'"] },
+          { id: "c0", label: "Sexy Move", moves: ["R", "U", "R'", "U'"] },
+          { id: "c1", label: "Setup", moves: ["R'", "F", "R2", "U'"] },
           { id: "c2", label: "Reverse Sexy", moves: ["R'", "U'", "R", "U"] },
-          { id: "c3", label: "Finish",       moves: ["R'", "F'"] },
+          { id: "c3", label: "Finish", moves: ["R'", "F'"] },
         ]
       }
     ]
@@ -209,8 +209,8 @@ export const algorithms = [
       {
         id: "F-1", name: "Standard",
         chunks: [
-          { id: "c0", label: "Setup",  moves: ["R'", "U'", "F'"] },
-          { id: "c1", label: "Core",   moves: ["R", "U", "R'", "U'", "R'", "F", "R2"] },
+          { id: "c0", label: "Setup", moves: ["R'", "U'", "F'"] },
+          { id: "c1", label: "Core", moves: ["R", "U", "R'", "U'", "R'", "F", "R2"] },
           { id: "c2", label: "Finish", moves: ["U'", "R'", "U'", "R", "U", "R'", "U", "R"] },
         ]
       }
@@ -223,9 +223,9 @@ export const algorithms = [
       {
         id: "Ja-1", name: "Standard L",
         chunks: [
-          { id: "c0", label: "Setup",    moves: ["R'", "U2", "R", "U"] },
+          { id: "c0", label: "Setup", moves: ["R'", "U2", "R", "U"] },
           { id: "c1", label: "L Insert", moves: ["R'", "U2", "L"] },
-          { id: "c2", label: "Finish",   moves: ["U'", "R", "U", "L'"] },
+          { id: "c2", label: "Finish", moves: ["U'", "R", "U", "L'"] },
         ]
       },
       {
@@ -244,9 +244,9 @@ export const algorithms = [
       {
         id: "Jb-1", name: "Standard",
         chunks: [
-          { id: "c0", label: "Sexy",    moves: ["R", "U", "R'", "F'"] },
-          { id: "c1", label: "Core",    moves: ["R", "U", "R'", "U'", "R'", "F", "R2"] },
-          { id: "c2", label: "Finish",  moves: ["U'", "R'", "U'"] },
+          { id: "c0", label: "Sexy", moves: ["R", "U", "R'", "F'"] },
+          { id: "c1", label: "Core", moves: ["R", "U", "R'", "U'", "R'", "F", "R2"] },
+          { id: "c2", label: "Finish", moves: ["U'", "R'", "U'"] },
         ]
       }
     ]
@@ -258,10 +258,10 @@ export const algorithms = [
       {
         id: "Ra-1", name: "Standard",
         chunks: [
-          { id: "c0", label: "Setup",   moves: ["R", "U'", "R'", "U'"] },
-          { id: "c1", label: "D Move",  moves: ["R", "U", "R", "D"] },
+          { id: "c0", label: "Setup", moves: ["R", "U'", "R'", "U'"] },
+          { id: "c1", label: "D Move", moves: ["R", "U", "R", "D"] },
           { id: "c2", label: "Release", moves: ["R'", "U'", "R", "D'"] },
-          { id: "c3", label: "Finish",  moves: ["R'", "U2", "R'"] },
+          { id: "c3", label: "Finish", moves: ["R'", "U2", "R'"] },
         ]
       }
     ]
@@ -273,10 +273,10 @@ export const algorithms = [
       {
         id: "Rb-1", name: "Standard",
         chunks: [
-          { id: "c0", label: "Setup",   moves: ["R'", "U2", "R", "U2"] },
-          { id: "c1", label: "F Move",  moves: ["R'", "F", "R", "U"] },
+          { id: "c0", label: "Setup", moves: ["R'", "U2", "R", "U2"] },
+          { id: "c1", label: "F Move", moves: ["R'", "F", "R", "U"] },
           { id: "c2", label: "Release", moves: ["R'", "U'", "R'", "F'"] },
-          { id: "c3", label: "Finish",  moves: ["R2", "U'"] },
+          { id: "c3", label: "Finish", moves: ["R2", "U'"] },
         ]
       }
     ]
@@ -288,10 +288,10 @@ export const algorithms = [
       {
         id: "Y-1", name: "Standard",
         chunks: [
-          { id: "c0", label: "F Setup",   moves: ["F", "R", "U'", "R'", "U'"] },
-          { id: "c1", label: "Core",      moves: ["R", "U", "R'", "F'"] },
-          { id: "c2", label: "Sexy",      moves: ["R", "U", "R'", "U'"] },
-          { id: "c3", label: "F Finish",  moves: ["R'", "F", "R", "F'"] },
+          { id: "c0", label: "F Setup", moves: ["F", "R", "U'", "R'", "U'"] },
+          { id: "c1", label: "Core", moves: ["R", "U", "R'", "F'"] },
+          { id: "c2", label: "Sexy", moves: ["R", "U", "R'", "U'"] },
+          { id: "c3", label: "F Finish", moves: ["R'", "F", "R", "F'"] },
         ]
       }
     ]
@@ -303,10 +303,10 @@ export const algorithms = [
       {
         id: "V-1", name: "Standard",
         chunks: [
-          { id: "c0", label: "Setup",   moves: ["R'", "U", "R'", "U'"] },
-          { id: "c1", label: "y Move",  moves: ["y", "R'", "F'", "R2"] },
-          { id: "c2", label: "Core",    moves: ["U'", "R'", "U", "R'", "F"] },
-          { id: "c3", label: "Finish",  moves: ["R", "F", "y'"] },
+          { id: "c0", label: "Setup", moves: ["R'", "U", "R'", "U'"] },
+          { id: "c1", label: "y Move", moves: ["y", "R'", "F'", "R2"] },
+          { id: "c2", label: "Core", moves: ["U'", "R'", "U", "R'", "F"] },
+          { id: "c3", label: "Finish", moves: ["R", "F", "y'"] },
         ]
       }
     ]
@@ -320,9 +320,9 @@ export const algorithms = [
       {
         id: "Ga-1", name: "Standard",
         chunks: [
-          { id: "c0", label: "Setup",   moves: ["R2", "u", "R'", "U"] },
-          { id: "c1", label: "Core",    moves: ["R'", "U'", "R", "u'"] },
-          { id: "c2", label: "Finish",  moves: ["R2", "y'", "R'", "U", "R"] },
+          { id: "c0", label: "Setup", moves: ["R2", "u", "R'", "U"] },
+          { id: "c1", label: "Core", moves: ["R'", "U'", "R", "u'"] },
+          { id: "c2", label: "Finish", moves: ["R2", "y'", "R'", "U", "R"] },
         ]
       }
     ]
@@ -334,9 +334,9 @@ export const algorithms = [
       {
         id: "Gb-1", name: "Standard",
         chunks: [
-          { id: "c0", label: "Setup",   moves: ["R'", "d'", "F", "R2"] },
-          { id: "c1", label: "Core",    moves: ["u", "R'", "U", "R", "U'"] },
-          { id: "c2", label: "Finish",  moves: ["R", "u'", "R2", "y"] },
+          { id: "c0", label: "Setup", moves: ["R'", "d'", "F", "R2"] },
+          { id: "c1", label: "Core", moves: ["u", "R'", "U", "R", "U'"] },
+          { id: "c2", label: "Finish", moves: ["R", "u'", "R2", "y"] },
         ]
       }
     ]
@@ -348,9 +348,9 @@ export const algorithms = [
       {
         id: "Gc-1", name: "Standard",
         chunks: [
-          { id: "c0", label: "Setup",   moves: ["R2", "u'", "R", "U'"] },
-          { id: "c1", label: "Core",    moves: ["R", "U", "R'", "u"] },
-          { id: "c2", label: "Finish",  moves: ["R2", "y", "R", "U'", "R'"] },
+          { id: "c0", label: "Setup", moves: ["R2", "u'", "R", "U'"] },
+          { id: "c1", label: "Core", moves: ["R", "U", "R'", "u"] },
+          { id: "c2", label: "Finish", moves: ["R2", "y", "R", "U'", "R'"] },
         ]
       }
     ]
@@ -362,9 +362,9 @@ export const algorithms = [
       {
         id: "Gd-1", name: "Standard",
         chunks: [
-          { id: "c0", label: "Setup",   moves: ["R", "d", "F'", "R2"] },
-          { id: "c1", label: "Core",    moves: ["u'", "R", "U'", "R'", "U"] },
-          { id: "c2", label: "Finish",  moves: ["R'", "u", "R2", "y'"] },
+          { id: "c0", label: "Setup", moves: ["R", "d", "F'", "R2"] },
+          { id: "c1", label: "Core", moves: ["u'", "R", "U'", "R'", "U"] },
+          { id: "c2", label: "Finish", moves: ["R'", "u", "R2", "y'"] },
         ]
       }
     ]
