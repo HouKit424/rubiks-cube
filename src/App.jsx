@@ -156,7 +156,7 @@ export default function App() {
               currentSingleMove={currentSingleMove}
               isComplete={isComplete}
               tempoScale={speedPreset.tempoScale}
-              stickering={mode === "OLL" ? "OLL" : "PLL"}
+              stickering="full"
             />
 
             <div className="practice-details-column">
