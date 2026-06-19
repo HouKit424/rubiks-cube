@@ -1,3 +1,5 @@
+import AlgorithmIcon from "./AlgorithmIcon";
+
 export default function AlgorithmSelector({ algorithms, categories, selectedId, onSelect }) {
   return (
     <div className="selector-root">
@@ -29,8 +31,11 @@ export default function AlgorithmSelector({ algorithms, categories, selectedId, 
                     onClick={() => onSelect(alg.id)}
                     title={`${alg.name} — ${totalMoves} moves`}
                   >
-                    <span className="pill-name">{alg.id}</span>
-                    <span className="pill-count">{totalMoves}</span>
+                    <AlgorithmIcon algId={alg.id} size={32} />
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '2px' }}>
+                      <span className="pill-name">{alg.id}</span>
+                      <span className="pill-count">{totalMoves} moves</span>
+                    </div>
                   </button>
                 );
               })}

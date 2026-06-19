@@ -13,19 +13,15 @@ import SolveTimer from "./components/SolveTimer";
 export default function App() {
   const [selectedId, setSelectedId] = useState("T");
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
-  const [theme,        setTheme]        = useState("dark");   // "dark" | "light"
-  const [speedPreset,  setSpeedPreset]  = useState(SPEED_PRESETS[1]); // normal
-  const [topColor, setTopColor] = useState('yellow'); // default top face color
-  const [layoutMode,   setLayoutMode]   = useState(() => {
-    return localStorage.getItem("cubetrainer_layout_mode") ?? "practice";
-  });
-
-  const [mode, setMode] = useState("PLL"); // "PLL" | "OLL"
+  const [theme,       setTheme]       = useState("dark");  // "dark" | "light"
+  const [speedPreset, setSpeedPreset] = useState(SPEED_PRESETS[1]);
+  const [mode,        setMode]        = useState("PLL");   // "PLL" | "OLL"
+  const [showTimer, setShowTimer]     = useState(false);
 
   const currentAlgorithms = mode === "PLL" ? algorithms : ollAlgorithms;
   const currentCategories = mode === "PLL" ? PLL_CATEGORIES : OLL_CATEGORIES;
-  const selectedCase = currentAlgorithms.find((a) => a.id === selectedId) ?? currentAlgorithms[0];
-  const algorithmVariant = selectedCase.variants[selectedVariantIndex] ?? selectedCase.variants[0];
+  const selectedCase      = currentAlgorithms.find((a) => a.id === selectedId) ?? currentAlgorithms[0];
+  const algorithmVariant  = selectedCase.variants[selectedVariantIndex] ?? selectedCase.variants[0];
 
   const {
     currentMoveIndex, currentChunkIndex, currentMoveWithinChunk,
@@ -35,7 +31,7 @@ export default function App() {
   } = useAlgorithmState(algorithmVariant, speedPreset);
 
   const [timerScramble, setTimerScramble] = useState("");
-  const [timerMode, setTimerMode] = useState("pll"); // "pll" | "full"
+  const [timerMode,     setTimerMode]     = useState("pll");
 
   const handleActiveScrambleChange = useCallback((scramble, mode) => {
     setTimerScramble(scramble);
@@ -47,7 +43,9 @@ export default function App() {
     setSelectedVariantIndex(0);
   };
 
-  const toggleTheme = () => setTheme((t) => (t === "dark" ? "light" : "dark"));
+
+
+  const [showThemeMenu, setShowThemeMenu] = useState(false);
 
   return (
     <div className="app-root" data-theme={theme}>
@@ -60,151 +58,108 @@ export default function App() {
         </div>
 
         <div className="header-right">
+          {/* PLL / OLL mode toggle */}
           <div className="mode-toggle" style={{ display: "flex", gap: "2px", background: "rgba(255,255,255,0.05)", padding: "3px", borderRadius: "20px", border: "1px solid var(--color-border)" }}>
             <button
               onClick={() => setMode("PLL")}
               className="header-tag"
-              style={{ margin: 0, cursor: "pointer", border: mode === "PLL" ? undefined : "none", background: mode === "PLL" ? undefined : "transparent", color: mode === "PLL" ? undefined : "var(--color-text-dim)" }}
+              style={{ margin: 0, cursor: "pointer", border: mode === "PLL" ? "1px solid var(--color-border)" : "none", background: mode === "PLL" ? "var(--color-surface)" : "transparent", color: mode === "PLL" ? "var(--color-text)" : "var(--color-text-dim)" }}
             >
               PLL
             </button>
             <button
               onClick={() => setMode("OLL")}
               className="header-tag"
-              style={{ margin: 0, cursor: "pointer", border: mode === "OLL" ? undefined : "none", background: mode === "OLL" ? undefined : "transparent", color: mode === "OLL" ? undefined : "var(--color-text-dim)" }}
+              style={{ margin: 0, cursor: "pointer", border: mode === "OLL" ? "1px solid var(--color-border)" : "none", background: mode === "OLL" ? "var(--color-surface)" : "transparent", color: mode === "OLL" ? "var(--color-text)" : "var(--color-text-dim)" }}
             >
               OLL
             </button>
           </div>
 
-          {/* Layout mode toggle */}
-          <button
-            id="btn-layout-toggle"
-            className="layout-toggle"
-            onClick={() => {
-              setLayoutMode((prev) => {
-                const next = prev === "practice" ? "classic" : "practice";
-                localStorage.setItem("cubetrainer_layout_mode", next);
-                return next;
-              });
-            }}
-            title={`Switch to ${layoutMode === "practice" ? "Classic" : "Practice"} Layout`}
-            aria-label="Toggle layout"
-          >
-            {layoutMode === "practice" ? "📋" : "⏱️"}
-          </button>
-
-          {/* Theme toggle */}
-                    {/* Theme toggle */}
-          <button
-            id="btn-theme-toggle"
-            className="theme-toggle"
-            onClick={toggleTheme}
-            title={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
-            aria-label="Toggle theme"
-          >
-            {theme === "dark" ? "☀️" : "🌙"}
-          </button>
-          {/* Top color selector */}
-          <div className="top-color-selector">
-            <span className="top-color-label">🎨</span>
-            <select
-              id="top-color-select"
-              value={topColor}
-              onChange={(e) => setTopColor(e.target.value)}
-              className="top-color-select"
-              aria-label="Top face color"
+          {/* Theme Selector Dropdown */}
+          <div className="theme-selector-wrapper" style={{ position: 'relative' }}>
+            <button
+              onClick={() => setShowThemeMenu(!showThemeMenu)}
+              title="Select Theme"
+              style={{
+                width: '32px', height: '32px', borderRadius: '50%', background: 'var(--color-surface)',
+                border: '1px solid var(--color-border)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: '16px'
+              }}
             >
-              <option value="yellow">Yellow</option>
-              <option value="white">White</option>
-              <option value="red">Red</option>
-              <option value="orange">Orange</option>
-              <option value="green">Green</option>
-              <option value="blue">Blue</option>
-            </select>
+              🎨
+            </button>
+            {showThemeMenu && (
+              <div
+                style={{
+                  position: 'absolute', top: '100%', right: 0, marginTop: '8px',
+                  background: 'var(--color-surface)', border: '1px solid var(--color-border)',
+                  borderRadius: '12px', padding: '12px', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.2)', zIndex: 100
+                }}
+              >
+                {[
+                  { id: 'dark', color: '#1e224a' },
+                  { id: 'pastel-purple', color: '#d8b4fe' },
+                  { id: 'pastel-blue', color: '#93c5fd' },
+                  { id: 'pastel-green', color: '#86efac' },
+                  { id: 'pastel-pink', color: '#f9a8d4' },
+                  { id: 'pastel-orange', color: '#fdba74' },
+                  { id: 'pastel-yellow', color: '#fde047' },
+                  { id: 'pastel-mint', color: '#5eead4' },
+                ].map(t => (
+                  <button
+                    key={t.id}
+                    onClick={() => { setTheme(t.id); setShowThemeMenu(false); }}
+                    title={t.id}
+                    aria-label={`Select ${t.id} theme`}
+                    style={{
+                      width: '24px', height: '24px', borderRadius: '50%', background: t.color,
+                      border: theme === t.id ? '2px solid var(--color-text)' : '1px solid rgba(0,0,0,0.2)',
+                      cursor: 'pointer', padding: 0, transition: '0.2s',
+                    }}
+                  />
+                ))}
+              </div>
+            )}
           </div>
+          {/* Timer Toggle */}
+          <button
+            onClick={() => setShowTimer(!showTimer)}
+            title="Toggle Timer"
+            style={{
+              height: '32px', borderRadius: '20px', background: showTimer ? 'var(--color-active)' : 'var(--color-surface)',
+              border: '1px solid var(--color-border)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              padding: '0 12px', fontSize: '12px', fontWeight: 'bold', color: showTimer ? '#fff' : 'var(--color-text)', transition: '0.2s', marginLeft: '8px'
+            }}
+          >
+            ⏱️ Timer
+          </button>
         </div>
       </header>
 
-      <main className="app-main" data-layout={layoutMode}>
-        {layoutMode === "practice" ? (
-          <>
-            {/* Left Column (70%): Visualizer + Chunks (in two rows/blocks) + Selector & controls */}
-            <section className="pane pane--practice-left" aria-label="Visualizer Panel">
-              <AlgorithmSelector
-                algorithms={currentAlgorithms}
-                categories={currentCategories}
-                selectedId={selectedId}
-                onSelect={handleSelectCase}
-              />
+      <main className="app-main">
+        {/* Left Column: Algorithm selector + cube viewer + timeline + controls */}
+        <section className="pane pane--practice-left" aria-label="Visualizer Panel">
+          <AlgorithmSelector
+            algorithms={currentAlgorithms}
+            categories={currentCategories}
+            selectedId={selectedId}
+            onSelect={handleSelectCase}
+          />
 
-              <div className="timeline-divider" />
+          <div className="timeline-divider" />
 
-              <div className="practice-viewer-row">
-                <CubeViewer
-                  topColor={topColor}
-                  setupAlg={timerMode === "full" ? timerScramble : setupAlg}
-                  currentSingleMove={timerMode === "full" ? "" : currentSingleMove}
-                  isComplete={timerMode === "full" ? false : isComplete}
-                  tempoScale={speedPreset.tempoScale}
-                  stickering={mode === "OLL" ? "OLL" : "PLL"}
-                />
+          <div className="practice-viewer-row">
+            <CubeViewer
+              setupAlg={setupAlg}
+              currentSingleMove={currentSingleMove}
+              isComplete={isComplete}
+              tempoScale={speedPreset.tempoScale}
+              stickering="full"
+            />
 
-                <div className="practice-details-column">
-                  <AlgorithmTimeline
-                    algorithmCase={selectedCase}
-                    variant={algorithmVariant}
-                    selectedVariantIndex={selectedVariantIndex}
-                    onSelectVariant={(idx) => setSelectedVariantIndex(idx)}
-                    currentMoveIndex={currentMoveIndex}
-                    currentChunkIndex={currentChunkIndex}
-                    currentMoveWithinChunk={currentMoveWithinChunk}
-                    flatMoves={flatMoves}
-                    isComplete={isComplete}
-                    isPlaying={isPlaying}
-                    onJumpToMove={jumpToMove}
-                    mode={mode}
-                  />
-
-                  <div className="controls-divider" />
-
-                  <Controls
-                    onPrev={prevMove}
-                    onNext={nextMove}
-                    onToggleAutoplay={toggleAutoplay}
-                    onReset={reset}
-                    isAtStart={isAtStart}
-                    isComplete={isComplete}
-                    isPlaying={isPlaying}
-                    speedPreset={speedPreset}
-                    onSpeedChange={setSpeedPreset}
-                  />
-                </div>
-              </div>
-            </section>
-
-            <div className="pane-divider pane-divider--vertical" />
-
-            {/* Right Column (30%): Full Screen Timer */}
-            <section className="pane pane--practice-right" aria-label="Practice Timer">
-              <SolveTimer
-                variant={algorithmVariant}
-                onActiveScrambleChange={handleActiveScrambleChange}
-              />
-            </section>
-          </>
-        ) : (
-          <>
-            {/* Top: 3D Cube + Algorithm Timeline side-by-side */}
-            <section className="pane pane--cube" aria-label="3D Cube & Timeline">
-              <CubeViewer
-                topColor={topColor}
-                setupAlg={timerMode === "full" ? timerScramble : setupAlg}
-                currentSingleMove={timerMode === "full" ? "" : currentSingleMove}
-                isComplete={timerMode === "full" ? false : isComplete}
-                tempoScale={speedPreset.tempoScale}
-                stickering={mode === "OLL" ? "OLL" : "PLL"}
-              />
+            <div className="practice-details-column">
               <AlgorithmTimeline
                 algorithmCase={selectedCase}
                 variant={algorithmVariant}
@@ -219,43 +174,33 @@ export default function App() {
                 onJumpToMove={jumpToMove}
                 mode={mode}
               />
-            </section>
 
-            <div className="pane-divider" />
+              <div className="controls-divider" />
 
-            {/* Bottom: Configuration & Interactive Tools */}
-            <section className="pane pane--timeline" aria-label="Controls & Timer Panel">
-              <AlgorithmSelector
-                algorithms={currentAlgorithms}
-                categories={currentCategories}
-                selectedId={selectedId}
-                onSelect={handleSelectCase}
+              <Controls
+                onPrev={prevMove}
+                onNext={nextMove}
+                onToggleAutoplay={toggleAutoplay}
+                onReset={reset}
+                isAtStart={isAtStart}
+                isComplete={isComplete}
+                isPlaying={isPlaying}
+                speedPreset={speedPreset}
+                onSpeedChange={setSpeedPreset}
               />
+            </div>
+          </div>
+        </section>
 
-              <div className="timeline-divider" />
+        {showTimer && <div className="pane-divider pane-divider--vertical" />}
 
-              <div className="bottom-dashboard">
-                <div className="bottom-controls-column">
-                  <Controls
-                    onPrev={prevMove}
-                    onNext={nextMove}
-                    onToggleAutoplay={toggleAutoplay}
-                    onReset={reset}
-                    isAtStart={isAtStart}
-                    isComplete={isComplete}
-                    isPlaying={isPlaying}
-                    speedPreset={speedPreset}
-                    onSpeedChange={setSpeedPreset}
-                  />
-                </div>
-                <SolveTimer
-                  variant={algorithmVariant}
-                  hideScramble={true}
-                  onActiveScrambleChange={handleActiveScrambleChange}
-                />
-              </div>
-            </section>
-          </>
+        {showTimer && (
+          <section className="pane pane--practice-right" aria-label="Practice Timer">
+            <SolveTimer
+              variant={algorithmVariant}
+              onActiveScrambleChange={handleActiveScrambleChange}
+            />
+          </section>
         )}
       </main>
 
@@ -263,4 +208,3 @@ export default function App() {
     </div>
   );
 }
-

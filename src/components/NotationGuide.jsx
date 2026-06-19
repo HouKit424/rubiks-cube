@@ -20,6 +20,12 @@ export default function NotationGuide() {
           <button className="notation-close" onClick={() => setIsOpen(false)} aria-label="Close">×</button>
         </div>
         <div className="notation-content">
+          <div className="notation-group" style={{ background: 'rgba(255, 235, 59, 0.1)', padding: '10px', borderRadius: '8px', borderLeft: '3px solid #ffeb3b', marginBottom: '12px' }}>
+            <h4 style={{ color: '#ffeb3b', margin: '0 0 4px 0', fontSize: '12px' }}>💡 Orientation Note</h4>
+            <div style={{ fontSize: '11px', lineHeight: '1.4' }}>
+              All icons and 3D viewer illustrations assume <strong>Yellow is on top</strong> and <strong>Green is facing forward</strong>.
+            </div>
+          </div>
           <div className="notation-group">
             <h4>Basic Moves (Clockwise)</h4>
             <div className="notation-grid">

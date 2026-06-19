@@ -48,7 +48,7 @@ export function useAlgorithmState(algorithm, speedPreset = SPEED_PRESETS[1]) {
     // Then we add whatever moves from the algorithm we have applied before `currentSingleMove`.
     const fullInverse = invertAlgorithm(flatMoves.map(m => m.move));
     const playedSoFar = currentMoveIndex < 0 ? [] : flatMoves.slice(0, currentMoveIndex).map((m) => m.move);
-    return movesToAlgString([...fullInverse, ...playedSoFar]);
+    return movesToAlgString(["x2", "y2", ...fullInverse, ...playedSoFar]);
   }, [currentMoveIndex, flatMoves]);
 
   const currentSingleMove = useMemo(() => {

@@ -1,32 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import { invertAlgorithm, movesToAlgString } from "../data/algorithms";
 
-// WCA standard 3x3x3 random scramble generator
-function generateScramble() {
-  const faces = ["R", "L", "U", "D", "F", "B"];
-  const modifiers = ["", "'", "2"];
-  const scrambleMoves = [];
-  let lastFace = "";
-  
-  for (let i = 0; i < 20; i++) {
-    let face = faces[Math.floor(Math.random() * faces.length)];
-    while (face === lastFace) {
-      face = faces[Math.floor(Math.random() * faces.length)];
-    }
-    const modifier = modifiers[Math.floor(Math.random() * modifiers.length)];
-    scrambleMoves.push(face + modifier);
-    lastFace = face;
-  }
-  return scrambleMoves.join(" ");
-}
-
 export default function SolveTimer({ variant, hideScramble = false, onActiveScrambleChange }) {
-  const [practiceMode, setPracticeMode] = useState("pll"); // "pll" | "full"
   const [timerState, setTimerState] = useState("idle"); // "idle" | "preparing" | "ready" | "running" | "finished"
   const [time, setTime] = useState(0); // in milliseconds
   const [solves, setSolves] = useState([]);
   const [personalBest, setPersonalBest] = useState(null);
-  const [fullCubeScramble, setFullCubeScramble] = useState("");
 
   const timerIntervalRef = useRef(null);
   const startTimeRef = useRef(null);
@@ -34,34 +13,22 @@ export default function SolveTimer({ variant, hideScramble = false, onActiveScra
   const isHoldingSpaceRef = useRef(false);
 
   // 1. Determine active scramble string based on mode
-  const pllScramble = (() => {
+  const currentScramble = (() => {
     if (!variant) return "";
     const allMoves = variant.chunks.flatMap((c) => c.moves);
     return movesToAlgString(invertAlgorithm(allMoves));
   })();
 
-  const currentScramble = practiceMode === "pll" ? pllScramble : fullCubeScramble;
-
-  // 2. Generate initial full cube scramble on mount or mode swap
-  useEffect(() => {
-    if (practiceMode === "full") {
-      setFullCubeScramble(generateScramble());
-    }
-  }, [practiceMode]);
-
   // 3. Notify parent of active scramble changes (to update 3D Cube Viewer starting position)
   useEffect(() => {
     if (onActiveScrambleChange) {
-      onActiveScrambleChange(currentScramble, practiceMode);
+      onActiveScrambleChange(currentScramble, "pll");
     }
-  }, [currentScramble, practiceMode, onActiveScrambleChange]);
+  }, [currentScramble, onActiveScrambleChange]);
 
   // 4. Load solves and PBs from localStorage when mode/variant changes
   useEffect(() => {
-    const storageKey =
-      practiceMode === "pll"
-        ? `cubetrainer_solves_${variant?.id ?? "unknown"}`
-        : "cubetrainer_solves_full_cube";
+    const storageKey = `cubetrainer_solves_${variant?.id ?? "unknown"}`;
         
     const stored = localStorage.getItem(storageKey);
     if (stored) {
@@ -86,7 +53,7 @@ export default function SolveTimer({ variant, hideScramble = false, onActiveScra
     // Reset timer clock face on configuration swap
     setTimerState("idle");
     setTime(0);
-  }, [variant, practiceMode]);
+  }, [variant]);
 
   // Synchronize document.body classes with timerState to deactivate App keyboard navigation
   useEffect(() => {
@@ -167,7 +134,7 @@ export default function SolveTimer({ variant, hideScramble = false, onActiveScra
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [timerState, variant, practiceMode, currentScramble]);
+  }, [timerState, variant, currentScramble]);
 
   const startTimer = () => {
     setTimerState("running");
@@ -196,20 +163,12 @@ export default function SolveTimer({ variant, hideScramble = false, onActiveScra
     const updatedSolves = [newSolve, ...solves];
     setSolves(updatedSolves);
     
-    const storageKey =
-      practiceMode === "pll"
-        ? `cubetrainer_solves_${variant?.id ?? "unknown"}`
-        : "cubetrainer_solves_full_cube";
+    const storageKey = `cubetrainer_solves_${variant?.id ?? "unknown"}`;
     localStorage.setItem(storageKey, JSON.stringify(updatedSolves));
 
     // Update PB
     if (personalBest === null || finalTime < personalBest) {
       setPersonalBest(finalTime);
-    }
-
-    // If full cube solve, automatically generate a new scramble for the next round
-    if (practiceMode === "full") {
-      setFullCubeScramble(generateScramble());
     }
   };
 
@@ -234,10 +193,7 @@ export default function SolveTimer({ variant, hideScramble = false, onActiveScra
     const updated = solves.filter((s) => s.id !== id);
     setSolves(updated);
     
-    const storageKey =
-      practiceMode === "pll"
-        ? `cubetrainer_solves_${variant?.id ?? "unknown"}`
-        : "cubetrainer_solves_full_cube";
+    const storageKey = `cubetrainer_solves_${variant?.id ?? "unknown"}`;
     localStorage.setItem(storageKey, JSON.stringify(updated));
 
     if (updated.length > 0) {
@@ -253,17 +209,9 @@ export default function SolveTimer({ variant, hideScramble = false, onActiveScra
       setSolves([]);
       setPersonalBest(null);
       
-      const storageKey =
-        practiceMode === "pll"
-          ? `cubetrainer_solves_${variant?.id ?? "unknown"}`
-          : "cubetrainer_solves_full_cube";
+      const storageKey = `cubetrainer_solves_${variant?.id ?? "unknown"}`;
       localStorage.removeItem(storageKey);
     }
-  };
-
-  const handleNewScrambleClick = (e) => {
-    e.stopPropagation();
-    setFullCubeScramble(generateScramble());
   };
 
   // Mouse/Touch triggers for mobile compatibility or click-based users
@@ -298,18 +246,10 @@ export default function SolveTimer({ variant, hideScramble = false, onActiveScra
       <div className="timer-card-header">
         <div className="timer-mode-selector">
           <button
-            className={`mode-tab-btn ${practiceMode === "pll" ? "mode-tab-btn--active" : ""}`}
-            onClick={() => setPracticeMode("pll")}
-            disabled={timerState === "running"}
+            className="mode-tab-btn mode-tab-btn--active"
+            disabled={true}
           >
-            PLL Case
-          </button>
-          <button
-            className={`mode-tab-btn ${practiceMode === "full" ? "mode-tab-btn--active" : ""}`}
-            onClick={() => setPracticeMode("full")}
-            disabled={timerState === "running"}
-          >
-            3x3 Full
+            Algorithm Practice
           </button>
         </div>
         
@@ -323,19 +263,7 @@ export default function SolveTimer({ variant, hideScramble = false, onActiveScra
       {!hideScramble && (
         <div className="scramble-box">
           <div className="scramble-box-header">
-            <span className="scramble-label">
-              {practiceMode === "pll" ? "PLL Scramble:" : "Random Scramble:"}
-            </span>
-            {practiceMode === "full" && (
-              <button
-                className="new-scramble-btn"
-                onClick={handleNewScrambleClick}
-                disabled={timerState === "running"}
-                title="Generate another random scramble"
-              >
-                🔄 New Scramble
-              </button>
-            )}
+            <span className="scramble-label">Scramble:</span>
           </div>
           <code className="scramble-text">{currentScramble}</code>
         </div>
