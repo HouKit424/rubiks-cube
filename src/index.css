@@ -734,17 +734,14 @@ twisty-player {
   transition: all var(--transition-fast);
 }
 
-.alg-pill:hover {
-  border-color: rgba(255, 255, 255, 0.3);
-  background: var(--color-surface-2);
-  
-  transform: translateY(-1px);
-}
-
+.alg-pill:hover,
 .alg-pill--active {
   border-color: var(--pill-color, var(--color-accent));
   background: color-mix(in srgb, var(--pill-color, var(--color-accent)) 20%, transparent);
-  
+}
+
+.alg-pill:hover {
+  transform: translateY(-1px);
 }
 
 .pill-name {
@@ -765,10 +762,12 @@ twisty-player {
   padding: 1px 5px;
 }
 
+.alg-pill:hover .pill-name,
 .alg-pill--active .pill-name {
   color: var(--color-text);
 }
 
+.alg-pill:hover .pill-count,
 .alg-pill--active .pill-count {
   color: var(--color-text-dim);
 }
