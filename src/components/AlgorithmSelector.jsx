@@ -23,11 +23,7 @@ export default function AlgorithmSelector({ algorithms, categories, selectedId, 
                     key={alg.id}
                     id={`alg-btn-${alg.id}`}
                     className={`alg-pill ${selectedId === alg.id ? "alg-pill--active" : ""}`}
-                    style={
-                      selectedId === alg.id
-                        ? { "--pill-color": cat.color }
-                        : {}
-                    }
+                    style={{ "--pill-color": cat.color }}
                     onClick={() => onSelect(alg.id)}
                     title={`${alg.name} — ${totalMoves} moves`}
                   >

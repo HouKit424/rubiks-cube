@@ -3,27 +3,27 @@ import ollData from '../data/ollIconData.json';
 import { PLL_ICON_DATA } from '../data/pllIconData';
 
 const C = {
-  bg:     'transparent',
-  grid:   'var(--color-border)',
-  yellow: 'var(--color-active)',
-  dark:   'var(--color-future)',
-  front:  '#4caf50',
-  right:  '#f44336',
-  back:   '#2196f3',
-  left:   '#ff9800',
-  white:  '#ffffff',
-  arrow1: 'var(--color-text)',
-  arrow2: 'var(--color-active)'
+  bg: 'transparent',
+  grid: 'var(--color-border)',
+  yellow: '#fbbf24',
+  dark: 'var(--color-future)',
+  front: '#4caf50',
+  right: '#f44336',
+  back: '#2196f3',
+  left: '#ff9800',
+  white: '#ffffff',
+  arrow1: '#000000',
+  arrow2: '#000000'
 };
 
 const SOLVED = {
-  T:  { c1: C.back },
-  R:  { c1: C.right },
-  B:  { c1: C.front },
-  L:  { c1: C.left },
-  TL: { c1: C.back,  c2: C.left  },
-  TR: { c1: C.back,  c2: C.right },
-  BL: { c1: C.front, c2: C.left  },
+  T: { c1: C.back },
+  R: { c1: C.right },
+  B: { c1: C.front },
+  L: { c1: C.left },
+  TL: { c1: C.back, c2: C.left },
+  TR: { c1: C.back, c2: C.right },
+  BL: { c1: C.front, c2: C.left },
   BR: { c1: C.front, c2: C.right }
 };
 
@@ -55,9 +55,9 @@ export default function AlgorithmIcon({ algId, mode, size = 48 }) {
     if (!caseData) return <svg width={S} height={S} />;
 
     return (
-      <svg width={S} height={S} viewBox={`0 0 ${S} ${S}`} style={{flexShrink: 0}}>
+      <svg width={S} height={S} viewBox={`0 0 ${S} ${S}`} style={{ flexShrink: 0 }}>
         {/* Draw top face grid */}
-        {[0, 1, 2].map(row => 
+        {[0, 1, 2].map(row =>
           [0, 1, 2].map(col => {
             const isYellow = caseData.top[row * 3 + col] === 1;
             return (
@@ -73,7 +73,7 @@ export default function AlgorithmIcon({ algId, mode, size = 48 }) {
             );
           })
         )}
-        
+
         {/* Draw sides */}
         {/* Top (Back) */}
         {caseData.sides.t.map((isY, i) => (
@@ -105,18 +105,18 @@ export default function AlgorithmIcon({ algId, mode, size = 48 }) {
     if (!caseData) return <svg width={S} height={S} />;
 
     const state = getScrambled(caseData.cyc);
-    
+
     const drawArrows = () => {
       const cen = S / 2;
       const pts = {
-        TL: [pad + cs * 0.5,  pad + cs * 0.5],
-        TR: [pad + cs * 2.5,  pad + cs * 0.5],
-        BL: [pad + cs * 0.5,  pad + cs * 2.5],
-        BR: [pad + cs * 2.5,  pad + cs * 2.5],
-        T:  [cen,             pad + cs * 0.5],
-        B:  [cen,             pad + cs * 2.5],
-        L:  [pad + cs * 0.5,  cen],
-        R:  [pad + cs * 2.5,  cen]
+        TL: [pad + cs * 0.5, pad + cs * 0.5],
+        TR: [pad + cs * 2.5, pad + cs * 0.5],
+        BL: [pad + cs * 0.5, pad + cs * 2.5],
+        BR: [pad + cs * 2.5, pad + cs * 2.5],
+        T: [cen, pad + cs * 0.5],
+        B: [cen, pad + cs * 2.5],
+        L: [pad + cs * 0.5, cen],
+        R: [pad + cs * 2.5, cen]
       };
 
       return caseData.cyc.map((cyc, idx) => {
@@ -126,18 +126,11 @@ export default function AlgorithmIcon({ algId, mode, size = 48 }) {
         if (cyc.length === 2) {
           const [ax, ay] = pts[cyc[0]];
           const [bx, by] = pts[cyc[1]];
-          const mx = (ax + bx) / 2, my = (ay + by) / 2;
-          const dx = bx - ax, dy = by - ay;
-          const nx = -dy * 0.28, ny = dx * 0.28;
-
-          const cx1 = mx + nx, cy1 = my + ny;
-          const cx2 = mx - nx, cy2 = my - ny;
 
           elements.push(
-            <path key={`arc1-${idx}`} d={`M ${ax} ${ay} Q ${cx1} ${cy1} ${bx} ${by}`} fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" />,
-            <polygon key={`head1-${idx}`} points={getArrowPoints(cx1, cy1, bx, by)} fill={color} stroke={color} strokeWidth="1" strokeLinejoin="round" />,
-            <path key={`arc2-${idx}`} d={`M ${bx} ${by} Q ${cx2} ${cy2} ${ax} ${ay}`} fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" />,
-            <polygon key={`head2-${idx}`} points={getArrowPoints(cx2, cy2, ax, ay)} fill={color} stroke={color} strokeWidth="1" strokeLinejoin="round" />
+            <line key={`line-${idx}`} x1={ax} y1={ay} x2={bx} y2={by} stroke={color} strokeWidth="2" strokeLinecap="round" />,
+            <polygon key={`head1-${idx}`} points={getArrowPoints(ax, ay, bx, by)} fill={color} stroke={color} strokeWidth="1" strokeLinejoin="round" />,
+            <polygon key={`head2-${idx}`} points={getArrowPoints(bx, by, ax, ay)} fill={color} stroke={color} strokeWidth="1" strokeLinejoin="round" />
           );
         } else {
           const n = cyc.length;
@@ -147,10 +140,10 @@ export default function AlgorithmIcon({ algId, mode, size = 48 }) {
             const mx = (ax + bx) / 2, my = (ay + by) / 2;
             const cx_ = mx - (my - (S / 2)) * 0.35;
             const cy_ = my + (mx - (S / 2)) * 0.35;
-            
+
             const t = 0.85;
-            const ex = (1-t)*(1-t)*ax + 2*(1-t)*t*cx_ + t*t*bx;
-            const ey = (1-t)*(1-t)*ay + 2*(1-t)*t*cy_ + t*t*by;
+            const ex = (1 - t) * (1 - t) * ax + 2 * (1 - t) * t * cx_ + t * t * bx;
+            const ey = (1 - t) * (1 - t) * ay + 2 * (1 - t) * t * cy_ + t * t * by;
 
             elements.push(
               <path key={`arc-${idx}-${i}`} d={`M ${ax} ${ay} Q ${cx_} ${cy_} ${bx} ${by}`} fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" />,
@@ -163,9 +156,9 @@ export default function AlgorithmIcon({ algId, mode, size = 48 }) {
     };
 
     return (
-      <svg width={S} height={S} viewBox={`0 0 ${S} ${S}`} style={{flexShrink: 0}}>
+      <svg width={S} height={S} viewBox={`0 0 ${S} ${S}`} style={{ flexShrink: 0 }}>
         {/* Draw top face grid */}
-        {[0, 1, 2].map(row => 
+        {[0, 1, 2].map(row =>
           [0, 1, 2].map(col => (
             <rect
               key={`grid-${row}-${col}`}
@@ -174,7 +167,7 @@ export default function AlgorithmIcon({ algId, mode, size = 48 }) {
               width={cs - 2}
               height={cs - 2}
               rx={r}
-              fill={C.grid}
+              fill={C.yellow}
             />
           ))
         )}
